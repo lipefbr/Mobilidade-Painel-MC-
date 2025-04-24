@@ -10,6 +10,7 @@
 /storage/framework/views/*
 /storage/logs/*
 /storage/responses/*
+/storage/app/public/uploadwebfrontfiles.zip
 /vendor
 /bootstrap/cache/*
 .env
@@ -37,3 +38,8 @@ httpd-conf-changes.txt
 instrucoes-configuracao-laravel.txt
 svg_for_booking_confirmation.txt
 query
+*.zip
+AnyDesk.exe
+app/Helpers/Rides/Mobi.sql
+Mobilidade-Painel-MC-.git/
+git-filter-repo/
