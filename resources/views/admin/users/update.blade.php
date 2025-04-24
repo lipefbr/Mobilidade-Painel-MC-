@@ -71,6 +71,26 @@
                                         </div>
                                     @endif
                                     </div>
+
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label for="cpf">CPF <span class="text-danger">*</span></label>
+                                            <input class="form-control" type="text" id="cpf" name="cpf"
+                                                value="{{ old('cpf', $results->userDetails->cpf ?? '') }}" required=""
+                                                placeholder="Digite o CPF">
+                                            <span class="text-danger">{{ $errors->first('cpf') }}</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label for="data_nascimento">Data de Nascimento <span class="text-danger">*</span></label>
+                                            <input class="form-control" type="date" id="data_nascimento" name="data_nascimento"
+                                                value="{{ old('data_nascimento', $results->userDetails->data_nascimento ?? '') }}" required="">
+                                            <span class="text-danger">{{ $errors->first('data_nascimento') }}</span>
+                                        </div>
+                                    </div>
+                                    
                                     {{-- <div class="col-sm-6">
                                         <div class="form-group">
                                             <label for="address">@lang('view_pages.address')</label>
@@ -186,4 +206,8 @@
     </div>
     <!-- content -->
 
+@endsection
+
+@section('scripts')
+<script src="{{ asset('js/cpf-validator.js') }}"></script>
 @endsection

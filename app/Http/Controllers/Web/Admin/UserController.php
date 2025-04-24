@@ -166,6 +166,15 @@ class UserController extends BaseController
         $user->attachRole(RoleSlug::USER);
         $user->userWallet()->create(['amount_added'=>0]);
 
+        // Criar detalhes do usuário com CPF e data de nascimento
+        $user->userDetails()->create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'mobile' => $request->mobile,
+            'cpf' => $request->cpf,
+            'data_nascimento' => $request->data_nascimento
+        ]);
+
 
         $message = trans('succes_messages.user_added_succesfully');
 
@@ -211,6 +220,18 @@ class UserController extends BaseController
         {
             $user->userWallet()->create(['amount_added'=>0]);
         }
+
+        // Atualizar ou criar detalhes do usuário com CPF e data de nascimento
+        $user->userDetails()->updateOrCreate(
+            ['user_id' => $user->id],
+            [
+                'name' => $request->name,
+                'email' => $request->email,
+                'mobile' => $request->mobile,
+                'cpf' => $request->cpf,
+                'data_nascimento' => $request->data_nascimento
+            ]
+        );
 
         $message = trans('succes_messages.user_updated_succesfully');
 

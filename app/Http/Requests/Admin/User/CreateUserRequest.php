@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Admin\User;
 
 use App\Http\Requests\BaseRequest;
+use App\Rules\ValidCpf;
 
 class CreateUserRequest extends BaseRequest
 {
@@ -23,7 +24,9 @@ class CreateUserRequest extends BaseRequest
             'country'=>'required|exists:countries,id',
             // 'gender'=>'required|in:male,female,others',
             // 'postal_code'=>'required|numeric',
-            'password'=>'required|min:8|max:32|confirmed'
+            'password'=>'required|min:8|max:32|confirmed',
+            'cpf' => ['required', new ValidCpf],
+            'data_nascimento' => 'required|date|before:today'
 
         ];
     }

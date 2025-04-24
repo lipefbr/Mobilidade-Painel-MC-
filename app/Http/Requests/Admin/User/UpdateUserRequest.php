@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Admin\User;
 
 use App\Http\Requests\BaseRequest;
+use App\Rules\ValidCpf;
 
 class UpdateUserRequest extends BaseRequest
 {
@@ -22,7 +23,9 @@ class UpdateUserRequest extends BaseRequest
             // 'city'=>'required',
             'country'=>'required|exists:countries,id',
             // 'gender'=>'required|in:male,fe-male,others',
-            // 'postal_code'=>'required|numeric'
+            // 'postal_code'=>'required|numeric',
+            'cpf' => ['required', new ValidCpf],
+            'data_nascimento' => 'required|date|before:today'
 
         ];
     }
