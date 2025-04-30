@@ -199,8 +199,22 @@ class DriverController extends BaseController
      */
   public function store(CreateDriverRequest $request)
     {
-        // dd($request->password);
+        // Depuração para verificar os dados recebidos
+        \Log::info('Dados do formulário de criação de motorista:', $request->all());
+        
         $created_params = $request->only(['service_location_id', 'name','mobile','email','address','gender','car_make','car_model','custom_make','custom_model','car_color','car_number']);
+        
+        // Adicionar explicitamente os campos CPF e data_nascimento
+        if ($request->has('cpf')) {
+            $created_params['cpf'] = $request->cpf;
+        }
+        
+        if ($request->has('data_nascimento')) {
+            $created_params['data_nascimento'] = $request->data_nascimento;
+        }
+        
+        // Depuração para verificar os dados que serão salvos
+        \Log::info('Dados que serão salvos no driver:', $created_params);
 
         if($request->has('transport_type'))
         {
@@ -293,7 +307,13 @@ class DriverController extends BaseController
 
       public function update(Driver $driver, UpdateDriverRequest $request)
     {
-        $updatedParams = $request->only(['service_location_id', 'name','mobile','email','gender','car_make','car_model','car_color','custom_make','custom_model','car_number']);
+        // Depuração para verificar os dados recebidos
+        \Log::info('Dados do formulário de atualização de motorista:', $request->all());
+        
+        $updatedParams = $request->only(['service_location_id', 'name','mobile','email','gender','car_make','car_model','car_color','custom_make','custom_model','car_number','cpf','data_nascimento']);
+        
+        // Depuração para verificar os dados que serão salvos
+        \Log::info('Dados que serão salvos no driver (update):', $updatedParams);
 
         if($request->has('transport_type'))
         {
@@ -351,6 +371,18 @@ class DriverController extends BaseController
         if(config('app.app_for') !== 'taxi' && config('app.app_for')  !== 'delivery'){
             $driverdata['transport_type'] = $request->input('transport_type');
         }
+        // Adicionar explicitamente os campos CPF e data_nascimento
+        if ($request->has('cpf')) {
+            $driverdata['cpf'] = $request->cpf;
+        }
+        
+        if ($request->has('data_nascimento')) {
+            $driverdata['data_nascimento'] = $request->data_nascimento;
+        }
+        
+        // Depuração para verificar os dados finais antes de salvar
+        \Log::info('Dados finais para atualização do driver:', $driverdata);
+        
         $driver->update($driverdata);
 
         $user_params = ['name'=>$request->input('name'),
@@ -868,5 +900,3 @@ class DriverController extends BaseController
         });
     }
 }
-
-

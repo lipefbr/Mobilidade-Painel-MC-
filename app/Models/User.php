@@ -36,14 +36,14 @@ use App\Models\Payment\WalletWithdrawalRequest;
 class User extends Authenticatable implements CanSendOTPContract
 {
     use CanSendOTP,
-    DeleteOldFiles,
-    HasActive,
-    HasApiTokens,
-    Notifiable,
-    UserAccessScopeTrait,
-    UserAccessTrait,
-    SearchableTrait,
-    HasActiveCompanyKey;
+        DeleteOldFiles,
+        HasActive,
+        HasApiTokens,
+        Notifiable,
+        UserAccessScopeTrait,
+        UserAccessTrait,
+        SearchableTrait,
+        HasActiveCompanyKey;
 
     /**
      * The table associated with the model.
@@ -58,7 +58,43 @@ class User extends Authenticatable implements CanSendOTPContract
      * @var array
      */
     protected $fillable = [
-        'name', 'username', 'email', 'password', 'mobile', 'country', 'profile_picture', 'email_confirmed', 'mobile_confirmed', 'email_confirmation_token', 'active','fcm_token','login_by','apn_token','timezone','rating','rating_total','no_of_ratings','refferal_code','referred_by','social_nickname','social_id','social_token','social_token_secret','social_refresh_token','social_expires_in','social_avatar','social_avatar_original','social_provider','company_key','lang','is_bid_app','authorization_code','is_deleted_at','gender'
+        'name',
+        'username',
+        'email',
+        'password',
+        'mobile',
+        'country',
+        'profile_picture',
+        'email_confirmed',
+        'mobile_confirmed',
+        'email_confirmation_token',
+        'active',
+        'fcm_token',
+        'login_by',
+        'apn_token',
+        'timezone',
+        'rating',
+        'rating_total',
+        'no_of_ratings',
+        'refferal_code',
+        'referred_by',
+        'social_nickname',
+        'social_id',
+        'social_token',
+        'social_token_secret',
+        'social_refresh_token',
+        'social_expires_in',
+        'social_avatar',
+        'social_avatar_original',
+        'social_provider',
+        'company_key',
+        'lang',
+        'is_bid_app',
+        'authorization_code',
+        'is_deleted_at',
+        'gender',
+        'cpf',
+        'date_of_birth',
     ];
 
     /**
@@ -67,7 +103,9 @@ class User extends Authenticatable implements CanSendOTPContract
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token', 'email_confirmation_token',
+        'password',
+        'remember_token',
+        'email_confirmation_token',
     ];
 
     /**
@@ -85,7 +123,15 @@ class User extends Authenticatable implements CanSendOTPContract
      * @var array
      */
     public $sortable = [
-        'id', 'name', 'username', 'email', 'mobile', 'profile_picture', 'last_login_at', 'created_at', 'updated_at',
+        'id',
+        'name',
+        'username',
+        'email',
+        'mobile',
+        'profile_picture',
+        'last_login_at',
+        'created_at',
+        'updated_at',
     ];
 
     /**
@@ -94,24 +140,24 @@ class User extends Authenticatable implements CanSendOTPContract
      * @var array
      */
     public $includes = [
-        'roles', 'otp','requestDetail'
+        'roles',
+        'otp',
+        'requestDetail',
     ];
 
     /**
-    * The accessors to append to the model's array form.
-    *
-    * @var array
-    */
-    protected $appends = [
-
-    ];
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = [];
 
     /**
-    * Get the Profile image full file path.
-    *
-    * @param string $value
-    * @return string
-    */
+     * Get the Profile image full file path.
+     *
+     * @param string $value
+     * @return string
+     */
     public function getProfilePictureAttribute($value)
     {
         if (!$value) {
@@ -120,6 +166,7 @@ class User extends Authenticatable implements CanSendOTPContract
         }
         return Storage::disk(env('FILESYSTEM_DRIVER'))->url(file_path($this->uploadPath(), $value));
     }
+
     /**
      * Override the "boot" method of the model.
      *
@@ -128,7 +175,6 @@ class User extends Authenticatable implements CanSendOTPContract
     public static function boot()
     {
         parent::boot();
-
         // Model event handlers
     }
 
@@ -226,38 +272,55 @@ class User extends Authenticatable implements CanSendOTPContract
     }
 
     /**
-    * The user wallet history associated with the user's id.
-    *
-    * @return \Illuminate\Database\Eloquent\Relations\hasOne
-    */
+     * The user wallet history associated with the user's id.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\hasMany
+     */
     public function userWalletHistory()
     {
         return $this->hasMany(UserWalletHistory::class, 'user_id', 'id');
     }
 
     /**
-    * The favouriteLocations associated with the user's id.
-    *
-    * @return \Illuminate\Database\Eloquent\Relations\hasOne
-    */
+     * The favouriteLocations associated with the user's id.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\hasMany
+     */
     public function favouriteLocations()
     {
         return $this->hasMany(FavouriteLocation::class, 'user_id', 'id');
     }
 
+    /**
+     * The user wallet associated with the user's id.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\hasOne
+     */
     public function userWallet()
     {
         return $this->hasOne(UserWallet::class, 'user_id', 'id');
     }
+
+    /**
+     * The driver wallet associated with the user's id.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\hasOne
+     */
     public function driverWallet()
     {
         return $this->hasOne(DriverWallet::class, 'user_id', 'id');
     }
 
+    /**
+     * The withdrawal requests history associated with the user's id.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\hasMany
+     */
     public function withdrawalRequestsHistory()
     {
         return $this->hasMany(WalletWithdrawalRequest::class, 'user_id', 'id');
     }
+
     /**
      * The Driver associated with the user's id.
      *
@@ -268,17 +331,28 @@ class User extends Authenticatable implements CanSendOTPContract
         return $this->hasOne(Driver::class, 'user_id', 'id');
     }
 
+    /**
+     * The social accounts associated with the user's id.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\hasMany
+     */
     public function accounts()
     {
         return $this->hasMany(LinkedSocialAccount::class, 'user_id', 'id');
     }
+
+    /**
+     * The request details associated with the user's id.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\hasMany
+     */
     public function requestDetail()
     {
         return $this->hasMany(Request::class, 'user_id', 'id');
     }
 
     /**
-     * The Driver associated with the user's id.
+     * The user details associated with the user's id.
      *
      * @return \Illuminate\Database\Eloquent\Relations\hasOne
      */
@@ -288,73 +362,85 @@ class User extends Authenticatable implements CanSendOTPContract
     }
 
     /**
-    * Get formated and converted timezone of user's created at.
-    *
-    * @param string $value
-    * @return string
-    */
+     * Get formatted and converted timezone of user's created at.
+     *
+     * @param string $value
+     * @return string
+     */
     public function getConvertedCreatedAtAttribute()
     {
-        if ($this->created_at==null||!auth()->user()->exists()) {
+        if ($this->created_at == null || !auth()->user()->exists()) {
             return null;
         }
-        $timezone = auth()->user()->timezone?:env('SYSTEM_DEFAULT_TIMEZONE');
+        $timezone = auth()->user()->timezone ?: env('SYSTEM_DEFAULT_TIMEZONE');
         return Carbon::parse($this->created_at)->setTimezone($timezone)->format('jS M h:i A');
     }
+
     /**
-    * Get formated and converted timezone of user's created at.
-    *
-    * @param string $value
-    * @return string
-    */
+     * Get formatted and converted timezone of user's updated at.
+     *
+     * @param string $value
+     * @return string
+     */
     public function getConvertedUpdatedAtAttribute()
     {
-        if ($this->updated_at==null||!auth()->user()->exists()) {
+        if ($this->updated_at == null || !auth()->user()->exists()) {
             return null;
         }
-        $timezone = auth()->user()->timezone?:env('SYSTEM_DEFAULT_TIMEZONE');
+        $timezone = auth()->user()->timezone ?: env('SYSTEM_DEFAULT_TIMEZONE');
         return Carbon::parse($this->updated_at)->setTimezone($timezone)->format('jS M h:i A');
     }
 
     /**
-    * Specifies the user's FCM token
-    *
-    * @return string
-    */
+     * Specifies the user's FCM token
+     *
+     * @return string
+     */
     public function routeNotificationForFcm()
     {
         return $this->fcm_token;
     }
+
+    /**
+     * Specifies the user's APN token
+     *
+     * @return string
+     */
     public function routeNotificationForApn()
     {
         return $this->apn_token;
     }
 
-    
-
+    /**
+     * Searchable rules.
+     *
+     * @var array
+     */
     protected $searchable = [
         'columns' => [
             'users.name' => 20,
-            'users.email'=> 20,
-            'users.mobile'=> 20
+            'users.email' => 20,
+            'users.mobile' => 20,
         ],
     ];
 
     /**
-    * The driver that the country belongs to.
-    * @tested
-    *
-    * @return \Illuminate\Database\Eloquent\Relations\belongsTo
-    */
+     * The country that the user belongs to.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\belongsTo
+     */
     public function countryDetail()
     {
         return $this->belongsTo(Country::class, 'country', 'id');
     }
 
+    /**
+     * The owner associated with the user's id.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\hasOne
+     */
     public function owner()
     {
         return $this->hasOne(Owner::class, 'user_id', 'id');
     }
-
-
 }

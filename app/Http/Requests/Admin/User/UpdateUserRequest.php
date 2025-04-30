@@ -3,30 +3,18 @@
 namespace App\Http\Requests\Admin\User;
 
 use App\Http\Requests\BaseRequest;
-use App\Rules\ValidCpf;
 
 class UpdateUserRequest extends BaseRequest
 {
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
     public function rules()
     {
         return [
             'name' => 'required|max:50',
-            'mobile'=>'required|mobile_number|min:8',
-            'email'=>'required|email',
-            // 'address'=>'required|min:10',
-            // 'state'=>'max:100',
-            // 'city'=>'required',
-            'country'=>'required|exists:countries,id',
-            // 'gender'=>'required|in:male,fe-male,others',
-            // 'postal_code'=>'required|numeric',
-            'cpf' => ['required', new ValidCpf],
-            'data_nascimento' => 'required|date|before:today'
-
+            'mobile' => 'required|mobile_number|min:8',
+            'email' => 'required|email',
+            'country' => 'required|exists:countries,id',
+            'cpf' => 'required|regex:/^\d{11}$/|unique:users,cpf,' . $this->route('user')->id,
+            'date_of_birth' => 'required|date|before:today',
         ];
     }
 }

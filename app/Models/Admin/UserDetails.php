@@ -25,7 +25,7 @@ class UserDetails extends Model
 	 * @var array
 	 */
 	protected $fillable = [
-		'user_id','name','mobile','email','cpf','data_nascimento','address','state','city','country','gender','active','currency','profile','token','token_expiry'
+		'user_id','name','mobile','email','address','state','city','country','gender','active','currency','profile','token','token_expiry'
 	];
 	public function user(){
 		return $this->belongsTo(User::class,'user_id','id');
