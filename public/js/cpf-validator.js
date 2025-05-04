@@ -69,4 +69,18 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
+
+    function formatCpf(cpf){
+        // Remove todos os caracteres não numéricos
+        cpf = cpf.replace(/\D/g, '');
+        
+        // Aplica a máscara de CPF: XXX.XXX.XXX-XX
+        if (cpf.length <= 11) {
+            cpf = cpf.replace(/(\d{3})(\d)/, '$1.$2');
+            cpf = cpf.replace(/(\d{3})(\d)/, '$1.$2');
+            cpf = cpf.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+        }
+        
+        return cpf;
+    }
 });

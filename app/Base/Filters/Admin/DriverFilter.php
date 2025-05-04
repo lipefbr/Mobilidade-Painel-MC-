@@ -17,8 +17,19 @@ class DriverFilter implements FilterContract {
      */
     public function filters() {
         return [
-            'active','approve','available','date_option','vehicle_type','area'
+            'active','approve','available','date_option','vehicle_type','area', 'search'
         ];
+    }
+    
+    // ...
+
+    public function search($builder, $value) {
+        $builder->where(function ($query) use ($value) {
+            $query->where('name', 'like', '%' . $value . '%')
+                ->orWhere('email', 'like', '%' . $value . '%')
+                ->orWhere('mobile', 'like', '%' . $value . '%')
+                ->orWhere('cpf', 'like', '%' . $value . '%');
+        });
     }
 
     public function active($builder, $value = 0) {
